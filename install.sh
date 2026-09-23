@@ -48,7 +48,7 @@ Opções:
                       sem falhar (opt-in)
   --with-especialistas instala os especialistas da fase 2 (lane por papel, opt-in):
                       skeleton/agents/specialists/{backend,frontend,qa,ui-designer,
-                      game-designer}.md → .opencode/agent/ (create-only) + blocos de
+                      game-designer,security-reviewer,a11y-auditor}.md → .opencode/agent/ (create-only) + blocos de
                       invocação anexados a .opencode/skills/sdd/SKILL.md e
                       .opencode/commands/sessao.md sob marcador <!-- sdd-especialistas:bloco -->.
                       Inertes sem `> Equipe:` na sessão (default `—` = fluxo padrão). Não toca
@@ -374,7 +374,7 @@ fi
 # Mesmo desenho do --with-arquiteto: agentes create-only + blocos de invocação idempotentes
 # sob marcador; sem `> Equipe:` na sessão os papéis ficam inertes (portão duplo no bloco).
 if [ "$WITH_ESPECIALISTAS" -eq 1 ]; then
-  for a in backend frontend qa ui-designer game-designer; do
+  for a in backend frontend qa ui-designer game-designer security-reviewer a11y-auditor; do
     install_create_only "$SKELETON_DIR/agents/specialists/$a.md" \
       "$TARGET/.opencode/agent/$a.md"
   done

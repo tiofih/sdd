@@ -20,7 +20,7 @@ Projetos adotam o kit por `git subtree` (veja "Adicionar via git" abaixo).
 | `skeleton/SESSIONS.md` | Stub do registro de sessões (ciclo + tabela + "Próxima sessão"). |
 | `skeleton/sessions/template.md` | Modelo do arquivo de cada sessão (as 9 seções + S1/S2). |
 | `skeleton/agents/` | Subagents (opencode) por papel do fluxo: `refinador`, `implementador-teste`, `revisor`, `playtester`, `redator-pr` (corpo do PR, barato — `--with-pr`) — instalados no projeto em `.opencode/agent/`. |
-| `skeleton/agents/specialists/` | Especialistas da fase 2 por lane: `backend`, `frontend`, `qa`, `ui-designer`, `game-designer` — instalados só com `--with-especialistas`; inerte sem `> Equipe:` na sessão. |
+| `skeleton/agents/specialists/` | Especialistas da fase 2 por lane: `backend`, `frontend`, `qa`, `ui-designer`, `game-designer`, `security-reviewer`, `a11y-auditor` — instalados só com `--with-especialistas`; inerte sem `> Equipe:` na sessão. |
 | `skeleton/especialistas/` | Blocos de invocação dos especialistas (`<!-- sdd-especialistas:bloco -->`) para `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md`. |
 | `skeleton/commands/` | Comandos orquestradores `/sessao` (ciclo de papéis, `--rapido` inline) e `/bugfix` (caminho enxuto PROTOCOL 3c). |
 | `skeleton/skills/sdd/` | Skill `sdd` — guia do ciclo de papéis (fases, S7 loop, parada na validação). |
