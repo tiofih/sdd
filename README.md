@@ -6,7 +6,8 @@ aceite **verificáveis por teste** e documentação viva.
 
 Este diretório é **auto-contido**: não referencia o projeto que o hospeda, e é
 também um **repo Git próprio** (`git@github.com:tiofih/sdd.git`, branch `main`).
-Projetos adotam o kit por `git subtree` (veja "Adicionar via git" abaixo).
+Projetos **instalam** o kit com `install.sh` (veja abaixo): os artefatos vão para o
+projeto, o kit fica aqui — fora deles.
 
 ## Conteúdo
 
@@ -71,49 +72,29 @@ Perfis opt-in (default off = comportamento atual):
 | `--with-arquiteto` | Papel de **desenho técnico (fase 1b, opcional, read-only)**: `skeleton/agents/optional/arquiteto.md` → `.opencode/agent/arquiteto.md` (**create-only**); blocos de invocação (`skeleton/arquiteto/`) anexados sob marcador `<!-- sdd-arquiteto:bloco -->` a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md` (append idempotente, arquivo-base intacto). **Não toca `AGENTS.md`.** Dependências declaradas no próprio agente (`## Dependências`) — o install avisa o que falta, sem falhar. |
 | `--with-especialistas` | **Especialistas da fase 2 (lane por papel)**: `skeleton/agents/specialists/{backend,frontend,qa,ui-designer,game-designer}.md` → `.opencode/agent/` (**create-only**); blocos (`skeleton/especialistas/`) sob marcador `<!-- sdd-especialistas:bloco -->` a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md`. Paralelo só com lanes disjuntas; portão duplo com `> Equipe:` na sessão. **Não toca `AGENTS.md`.** |
 
-## Adicionar o SDD a outro projeto via git (subtree)
+## Adicionar o SDD a outro projeto (kit externo)
 
-O kit tem um repo canônico próprio: `git@github.com:tiofih/sdd.git` (branch `main`).
-Para adotá-lo num projeto, importe como **subtree** — traz o kit com histórico para
-dentro do projeto e permite atualizá-lo depois com `pull`:
-
-```bash
-cd /caminho/do/projeto                     # precisa ser um repo git
-git remote add sdd git@github.com:tiofih/sdd.git
-git subtree add --prefix=sdd sdd main --squash
-./sdd/install.sh . --projeto "Meu App"
-```
-
-Alternativa sem histórico (só copiar os arquivos atuais):
+O kit tem um repo canônico próprio: `git@github.com:tiofih/sdd.git` (branch `main`) —
+e ele **não entra no repo do projeto**: nem por `subtree`, nem por cópia de `sdd/`. O
+projeto fica só com os **artefatos instalados** (`AGENTS.md`, `sessions/`, `scripts/`,
+`.opencode/`), e o kit vive aqui e no GitHub.
 
 ```bash
+cd /caminho/do/projeto                       # repo git do projeto
 git clone git@github.com:tiofih/sdd.git /tmp/sdd
-mkdir -p <projeto>/sdd
-cp -r /tmp/sdd/PROTOCOL.md /tmp/sdd/install.sh /tmp/sdd/skeleton <projeto>/sdd/
-cd <projeto> && ./sdd/install.sh . --projeto "Meu App"
+/tmp/sdd/install.sh . --projeto "Meu App"    # + --with-pr / --with-especialistas / …
 ```
 
-### Sync: projeto ↔ kit (`subtree pull`/`push`)
+### Sync: projeto ↔ kit (sem `sdd/` no projeto)
 
-Projetos com o kit importado por subtree (caso deste repo) sincronizam assim:
-
-- **Puxar** atualizações do kit para o projeto:
-  `git subtree pull --prefix=sdd sdd main`
-- **Empurrar** mudanças feitas no projeto para o kit:
-  `git subtree push --prefix=sdd sdd main`
-
-Regras de sync:
-
-- `--squash` no `add`/`pull` achatam o histórico do kit dentro do projeto (1 commit por
-  versão importada) — mais limpo; sem `--squash`, o histórico completo do kit entra no
-  projeto.
-- O `push` envia **apenas o subconjunto do caminho `sdd/`** para o remote do kit; os
-  SHAs resultantes no kit diferem dos do projeto (esperado — é um split).
-- Não edite o kit no projeto e no repo canônico ao mesmo tempo: escolha um lado e
-  propague com `pull`/`push` (o `merge` de dois lados divergentes exige resolver).
-- O `install.sh` roda **depois** de trazer o kit, para instanciar o skeleton nos
-  artefatos do projeto (`REQUIREMENTS.md`, `SESSIONS.md`, `sessions/`, `scripts/`,
-  `AGENTS.md`).
+- **Instalação create-only:** rodar de novo só cria o que faltar, nunca sobrescreve.
+  Melhorias do kit em arquivos já instalados entram por **troca de bloco** (marcadores
+  `<!-- sdd-*:bloco -->` no `AGENTS.md`, `SKILL.md`, `sessao.md`) ou merge manual do diff
+  do kit — sem cópia versionada do kit dentro do projeto.
+- O `PROTOCOL.md` (método completo) é lido no repo canônico
+  (`github.com/tiofih/sdd/blob/main/PROTOCOL.md`); o `AGENTS.md` instalado carrega as
+  regras mandatórias do dia a dia.
+- Nunca edite o kit dentro de um projeto — a fonte é este repo.
 
 ## Instalação (manual, ~5 min)
 

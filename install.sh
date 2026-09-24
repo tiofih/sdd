@@ -204,7 +204,8 @@ install_file() { # src dst [key=value ...]
 # do PROJETO depois da primeira instalação (slots de prosa preenchidos à mão, adaptação
 # local dos papéis/comandos), e o --force o reverteria para o texto neutro do kit. Efeito
 # colateral aceito: melhorias futuras do kit nesses arquivos NÃO chegam sozinhas — o
-# projeto faz o merge à mão (o `sdd/` fica no repo via subtree justamente para isso).
+# projeto faz o merge à mão ou troca o bloco sob marcador — o kit fica fora do repo
+# (nada de `sdd/` no projeto).
 install_create_only() { # src dst [key=value ...]
   local src="$1" dst="$2"
   shift 2
