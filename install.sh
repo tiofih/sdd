@@ -46,6 +46,12 @@ Opções:
                       e .opencode/commands/sessao.md. Não toca AGENTS.md. As dependências estão
                       declaradas no próprio agente (## Dependências) — o install avisa o que falta,
                       sem falhar (opt-in)
+  --with-debate       instala o debate A/B entre modelos gratuitos (opt-in, advisory):
+                      skeleton/agents/optional/debatedor.md → .opencode/agent/debatedor.md
+                      (create-only) + skeleton/commands/debate.md → .opencode/commands/debate.md
+                      (create-only) + blocos de invocação anexados a .opencode/skills/sdd/SKILL.md
+                      e .opencode/commands/sessao.md. Exige provider de gateway no opencode.json
+                      (ex.: omniroute) — sem ele o debate cai para 1 opinião inline (opt-in)
   --with-especialistas instala os especialistas da fase 2 (lane por papel, opt-in):
                       skeleton/agents/specialists/{backend,frontend,qa,ui-designer,
                       game-designer,security-reviewer,a11y-auditor}.md → .opencode/agent/ (create-only) + blocos de
@@ -74,6 +80,7 @@ WITH_STACK=0
 WITH_EXTRA_COMMANDS=0
 WITH_PR=0
 WITH_ARQUITETO=0
+WITH_DEBATE=0
 WITH_ESPECIALISTAS=0
 # Destinos que o --force substituiu apesar de DIVERGIREM do conteúdo renderizado do kit
 # (byte a byte). Ver install_file(): a divergência costuma ser adaptação local do projeto
@@ -91,6 +98,7 @@ while [ $# -gt 0 ]; do
     --with-extra-commands) WITH_EXTRA_COMMANDS=1 ;;
     --with-pr) WITH_PR=1 ;;
     --with-arquiteto) WITH_ARQUITETO=1 ;;
+    --with-debate) WITH_DEBATE=1 ;;
     --with-especialistas) WITH_ESPECIALISTAS=1 ;;
     --projeto) PROJETO="${2:-}"; shift ;;
     --proxima) PROXIMA="${2:-}"; shift ;;
@@ -369,6 +377,25 @@ if [ "$WITH_ARQUITETO" -eq 1 ]; then
   grep -q 'context-mode' "$TARGET/AGENTS.md" "$TARGET/opencode.json" 2>/dev/null \
     || aviso_arq "context-mode (--with-context-mode)" "análise ampla entra crua; cita arquivo:linha"
   echo "install>   (detalhe por dependência: .opencode/agent/arquiteto.md § Dependências)" >&2
+fi
+
+# --- perfil opt-in --with-debate (debate A/B entre modelos gratuitos, advisory) ---
+# Mesmo desenho do --with-arquiteto: agente create-only FLAT + comando avulso create-only
+# + blocos de invocação idempotentes sob marcador; sem o agente, o debate não existe
+# (portão no bloco) e o refinamento segue normal.
+if [ "$WITH_DEBATE" -eq 1 ]; then
+  install_create_only "$SKELETON_DIR/agents/optional/debatedor.md" "$TARGET/.opencode/agent/debatedor.md"
+  install_create_only "$SKELETON_DIR/commands/debate.md" "$TARGET/.opencode/commands/debate.md"
+
+  install_block "$SKELETON_DIR/debate/SKILL-block.md" \
+    "$TARGET/.opencode/skills/sdd/SKILL.md" '<!-- sdd-debate:bloco -->' "skills/sdd/SKILL.md"
+  install_block "$SKELETON_DIR/debate/sessao-block.md" \
+    "$TARGET/.opencode/commands/sessao.md" '<!-- sdd-debate:bloco -->' "commands/sessao.md"
+
+  # Aviso de dependência: NUNCA erro. Sem gateway o debate degrada para 1 opinião inline
+  # (bloco sdd-debate declara a queda); o detalhe canônico é o próprio bloco.
+  grep -q 'omniroute' "$TARGET/opencode.json" ~/.config/opencode/opencode.json 2>/dev/null \
+    || echo "install> AVISO: provider omniroute ausente — debate: 1 opinião inline, diversidade nenhuma" >&2
 fi
 
 # --- perfil opt-in --with-especialistas (fase 2 paralela por lane) ---
