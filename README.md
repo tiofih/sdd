@@ -34,6 +34,9 @@ projeto, o kit fica aqui — fora deles.
 | `skeleton/commands/iniciar-sessao.md` + `levantar-roadmap.md` | Comandos extras de abertura/digest — instalados só com `--with-extra-commands`. |
 | `skeleton/agents/optional/debugger.md` | Agente opcional de diagnóstico (read-only) — agrupamento provisório com `--with-extra-commands` (ver tabela de perfis). |
 | `skeleton/agents/optional/arquiteto.md` | Agente opcional de **desenho técnico** (fase 1b, read-only) — instalado só com `--with-arquiteto`; as dependências dele estão declaradas no próprio arquivo (`## Dependências`). |
+| `skeleton/agents/optional/debatedor.md` | Agente opcional de **debate A/B entre modelos gratuitos** (2 rounds: voto → réplica, advisory read-only) — instalado só com `--with-debate`; pins de modelo e teto de rounds no bloco `sdd-debate`. |
+| `skeleton/debate/*-block.md` | Blocos de invocação do debate (marcador `<!-- sdd-debate:bloco -->`) anexados a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md` — instalados só com `--with-debate`. |
+| `skeleton/commands/debate.md` | Comando avulso `/debate` (fora ou dentro de sessão) — instalado só com `--with-debate`. |
 | `skeleton/arquiteto/*-block.md` | Blocos de invocação da fase 1b (marcador `<!-- sdd-arquiteto:bloco -->`) anexados a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md` — instalados só com `--with-arquiteto`. |
 
 ## Instalação (recomendada — `install.sh`)
@@ -71,6 +74,7 @@ Perfis opt-in (default off = comportamento atual):
 | `--with-pr` | Modo PR (a entrega da sessão é um PR/MR): `skeleton/scripts/abrir-pr` → `scripts/` (+x); `skeleton/pr/` (README do modo) → `docs/pr/` (**create-only**); bloco do modo PR (marcador `<!-- sdd-pr: ativo -->`) anexado ao `AGENTS.md` e ao `sessions/template.md`; cria `docs/pr/` + `sessions/pr/`. Corpo do PR gerado do arquivo da sessão (sem template, sem `checar-pr`). Sem a flag, nada disso existe. |
 | `--with-arquiteto` | Papel de **desenho técnico (fase 1b, opcional, read-only)**: `skeleton/agents/optional/arquiteto.md` → `.opencode/agent/arquiteto.md` (**create-only**); blocos de invocação (`skeleton/arquiteto/`) anexados sob marcador `<!-- sdd-arquiteto:bloco -->` a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md` (append idempotente, arquivo-base intacto). **Não toca `AGENTS.md`.** Dependências declaradas no próprio agente (`## Dependências`) — o install avisa o que falta, sem falhar. |
 | `--with-especialistas` | **Especialistas da fase 2 (lane por papel)**: `skeleton/agents/specialists/{backend,frontend,qa,ui-designer,game-designer}.md` → `.opencode/agent/` (**create-only**); blocos (`skeleton/especialistas/`) sob marcador `<!-- sdd-especialistas:bloco -->` a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md`. Paralelo só com lanes disjuntas; portão duplo com `> Equipe:` na sessão. **Não toca `AGENTS.md`.** |
+| `--with-debate` | **Debate A/B entre modelos gratuitos (advisory, 2 rounds)**: `skeleton/agents/optional/debatedor.md` → `.opencode/agent/debatedor.md` (**create-only**); `skeleton/commands/debate.md` → `.opencode/commands/debate.md` (**create-only**); blocos (`skeleton/debate/`) sob marcador `<!-- sdd-debate:bloco -->` a `.opencode/skills/sdd/SKILL.md` e `.opencode/commands/sessao.md`. Exige gateway no `opencode.json` (ex.: omniroute) — sem ele, 1 opinião inline. **Não toca `AGENTS.md`.** |
 
 ## Adicionar o SDD a outro projeto (kit externo)
 
