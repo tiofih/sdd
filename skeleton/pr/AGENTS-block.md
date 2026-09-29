@@ -68,6 +68,10 @@
   sessão e o custo de 2 gates por sessão não pagava o que produziam (texto já existente
   no refinamento). O que nenhum gate captura (compreensão, passos funcionando, evidência
   verdadeira) é julgamento do Revisor (quando houver) e do usuário — declarado como tal.
+- **Fora de escopo deliberado** (congelado no corte do portão): corpo vazio/sem `\n`
+  final, seção fora de ordem, roteiro sem tabela e 'O que foi validado' sem comando
+  citado — subsumidos por 'falta seção obrigatória' como julgamento do Revisor
+  (quando houver) e do usuário, nunca checagem mecânica.
 
 ## Ferramenta de abertura (`PR_CMD`)
 
